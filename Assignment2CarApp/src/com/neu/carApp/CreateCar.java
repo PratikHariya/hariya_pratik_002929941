@@ -4,8 +4,12 @@
  */
 package com.neu.carApp;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,6 +23,8 @@ public class CreateCar extends javax.swing.JPanel {
     
     CarProperties carProperties;
     CarPropertyObjects carPropertyObjects;
+    ArrayList<Integer> srNoList;
+    HashSet<String> manufacturerList;
     
     public CreateCar() {
         initComponents();
@@ -29,6 +35,8 @@ public class CreateCar extends javax.swing.JPanel {
         initComponents();
         this.carProperties = carProperties;
         this.carPropertyObjects = carPropertyObjects;
+        this.srNoList = this.carPropertyObjects.getSrNoList();
+        this.manufacturerList = this.carPropertyObjects.getManufacturerList();
     }
 
     /**
@@ -54,8 +62,6 @@ public class CreateCar extends javax.swing.JPanel {
         lblMaintenanceCertValidity = new javax.swing.JLabel();
         lblCity = new javax.swing.JLabel();
         txtCarName = new javax.swing.JTextField();
-        rbPasssengerCarYes = new javax.swing.JRadioButton();
-        rbPassengerCarNo = new javax.swing.JRadioButton();
         rbAvailabilityYes = new javax.swing.JRadioButton();
         rbAvailabilityNo = new javax.swing.JRadioButton();
         txtManufacturer = new javax.swing.JTextField();
@@ -69,6 +75,13 @@ public class CreateCar extends javax.swing.JPanel {
         lblUploadFIle = new javax.swing.JLabel();
         btnUploadFIle = new javax.swing.JButton();
         btnCreate = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblSrNo = new javax.swing.JTable();
+        btnShowDetails = new javax.swing.JButton();
+        rbPasssengerCarYes = new javax.swing.JCheckBox();
+        rbPassengerCarNo = new javax.swing.JCheckBox();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblManufacturer = new javax.swing.JTable();
 
         lblCarName.setText("Car Name ");
 
@@ -96,22 +109,16 @@ public class CreateCar extends javax.swing.JPanel {
             }
         });
 
-        buttonGroup1.add(rbPasssengerCarYes);
-        rbPasssengerCarYes.setText("Yes");
-
-        buttonGroup1.add(rbPassengerCarNo);
-        rbPassengerCarNo.setText("No");
-        rbPassengerCarNo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbPassengerCarNoActionPerformed(evt);
-            }
-        });
-
         buttonGroup2.add(rbAvailabilityYes);
         rbAvailabilityYes.setText("Yes");
 
         buttonGroup2.add(rbAvailabilityNo);
         rbAvailabilityNo.setText("No");
+        rbAvailabilityNo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbAvailabilityNoActionPerformed(evt);
+            }
+        });
 
         txtYeatOfManufacture.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -122,9 +129,19 @@ public class CreateCar extends javax.swing.JPanel {
         buttonGroup3.add(rbMCVYes);
         rbMCVYes.setSelected(true);
         rbMCVYes.setText("Yes");
+        rbMCVYes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbMCVYesActionPerformed(evt);
+            }
+        });
 
         buttonGroup3.add(rbMCVNo);
         rbMCVNo.setText("No");
+        rbMCVNo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbMCVNoActionPerformed(evt);
+            }
+        });
 
         cbCity.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Boston", "Jersey City", "Hoboken", "New York City" }));
         cbCity.addActionListener(new java.awt.event.ActionListener() {
@@ -144,122 +161,171 @@ public class CreateCar extends javax.swing.JPanel {
             }
         });
 
+        tblSrNo.setAutoCreateRowSorter(true);
+        tblSrNo.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Serial Number"
+            }
+        ));
+        tblSrNo.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tblSrNo);
+
+        btnShowDetails.setText("Serial Number Search");
+        btnShowDetails.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowDetailsActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(rbPasssengerCarYes);
+        rbPasssengerCarYes.setText("Yes");
+
+        buttonGroup1.add(rbPassengerCarNo);
+        rbPassengerCarNo.setText("No");
+
+        tblManufacturer.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Manufacturers"
+            }
+        ));
+        jScrollPane2.setViewportView(tblManufacturer);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblModelNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblSerialNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblSeats, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblYearOfManufacture, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
-                    .addComponent(lblManufacturer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblAvailability, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblPassengerCar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblCarName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtCarName)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(rbPasssengerCarYes)
-                        .addGap(18, 18, 18)
-                        .addComponent(rbPassengerCarNo))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(rbAvailabilityYes)
-                        .addGap(18, 18, 18)
-                        .addComponent(rbAvailabilityNo))
-                    .addComponent(txtManufacturer)
-                    .addComponent(txtYeatOfManufacture, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
-                    .addComponent(txtSeats)
-                    .addComponent(txtSerialNumber)
-                    .addComponent(txtModelNumber))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(177, 177, 177)
+                        .addComponent(lblUploadFIle, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblMaintenanceCertValidity)
-                                .addGap(18, 18, 18)
-                                .addComponent(rbMCVYes)
-                                .addGap(18, 18, 18)
-                                .addComponent(rbMCVNo))
+                            .addComponent(btnCreate, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
+                            .addComponent(btnUploadFIle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(lblUploadFIle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
-                                    .addComponent(lblCity, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                    .addComponent(lblModelNumber, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lblCarName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnShowDetails, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cbCity, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnUploadFIle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(115, 115, 115)
-                        .addComponent(btnCreate)))
-                .addContainerGap(82, Short.MAX_VALUE))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtCarName, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                                        .addComponent(txtModelNumber))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(29, 29, 29)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblManufacturer, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtManufacturer, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(63, 63, 63)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblCity, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(cbCity, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblYearOfManufacture, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(22, 22, 22)
+                                .addComponent(txtYeatOfManufacture, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblSerialNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(22, 22, 22)
+                                .addComponent(txtSerialNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblSeats, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtSeats, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(79, 79, 79)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(rbAvailabilityYes, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(rbAvailabilityNo, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblMaintenanceCertValidity, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(rbMCVYes, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(rbMCVNo, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblPassengerCar, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(rbPasssengerCarYes, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(rbPassengerCarNo, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(44, 44, 44)
+                .addContainerGap(53, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSerialNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblSerialNumber))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCarName)
-                    .addComponent(txtCarName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblPassengerCar)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(rbPasssengerCarYes)
-                        .addComponent(rbPassengerCarNo)))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblAvailability)
-                        .addComponent(rbAvailabilityYes)
-                        .addComponent(rbAvailabilityNo))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblMaintenanceCertValidity)
-                        .addComponent(rbMCVYes)
-                        .addComponent(rbMCVNo)))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblManufacturer)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtManufacturer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblCity)
-                        .addComponent(cbCity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblYearOfManufacture)
-                    .addComponent(txtYeatOfManufacture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtCarName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblSeats)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtSeats, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblUploadFIle)
-                        .addComponent(btnUploadFIle)))
-                .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblSerialNumber)
-                    .addComponent(txtSerialNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSeats, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblAvailability)
+                    .addComponent(rbAvailabilityYes)
+                    .addComponent(rbAvailabilityNo))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblManufacturer)
+                    .addComponent(txtManufacturer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblYearOfManufacture)
+                    .addComponent(txtYeatOfManufacture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMaintenanceCertValidity)
+                    .addComponent(rbMCVYes)
+                    .addComponent(rbMCVNo))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblModelNumber)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtModelNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnCreate)))
-                .addContainerGap(86, Short.MAX_VALUE))
+                    .addComponent(txtModelNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCity)
+                    .addComponent(cbCity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPassengerCar)
+                    .addComponent(rbPasssengerCarYes)
+                    .addComponent(rbPassengerCarNo))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addComponent(btnCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblUploadFIle)
+                    .addComponent(btnUploadFIle))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnShowDetails)
+                .addGap(22, 22, 22))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtCarNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCarNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCarNameActionPerformed
-
-    private void rbPassengerCarNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPassengerCarNoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rbPassengerCarNoActionPerformed
 
     private void txtYeatOfManufactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtYeatOfManufactureActionPerformed
         // TODO add your handling code here:
@@ -271,8 +337,12 @@ public class CreateCar extends javax.swing.JPanel {
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         // TODO add your handling code here:
-        System.out.println(carPropertyObjects.getCarMap());
+        
+        int initialSize, finalSize;       
         CarProperties carProperties = new CarProperties();
+        
+        initialSize = carPropertyObjects.getCarMap().size();
+        
         carProperties.setCarName(txtCarName.getText());
         
         if(rbPasssengerCarYes.isSelected())
@@ -301,24 +371,102 @@ public class CreateCar extends javax.swing.JPanel {
         tempMap = carPropertyObjects.getCarMap();
         tempMap.put(carProperties.getSerialNumber(), carProperties);
         carPropertyObjects.setCarMap(tempMap);
+        
+        finalSize = carPropertyObjects.getCarMap().size();
+        
         System.out.println(carPropertyObjects.getCarMap());
         System.out.println(carPropertyObjects.getCarMap().get(1).getModelNumber());
         if(carPropertyObjects.getCarMap().get(2) != null) {
            System.out.println(carPropertyObjects.getCarMap().get(2).getModelNumber()); 
         }
         
+        if(initialSize != finalSize) {
+            srNoList.add(carProperties.getSerialNumber());
+        }
+        else {
+            
+        }
+        
+        manufacturerList.add(carProperties.getManufacturer());
+        
         JOptionPane.showMessageDialog(this, "Record Created");
         
+        DefaultTableModel model1= (DefaultTableModel) tblSrNo.getModel();
+        model1.setRowCount(0);
+        for(Integer srNo : srNoList){
+            Object[] row = new Object[1];
+            row[0]=srNo;
+            model1.addRow(row);
+        }
+        
+        DefaultTableModel manufacturerModel= (DefaultTableModel) tblManufacturer.getModel();
+        manufacturerModel.setRowCount(0);
+        
+        Iterator<String> i = manufacturerList.iterator();
+        
+        while(i.hasNext()) {
+            Object[] row = new Object[1];
+            row[0]=i.next();
+            manufacturerModel.addRow(row);
+        }
+        
     }//GEN-LAST:event_btnCreateActionPerformed
+
+    private void btnShowDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowDetailsActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model= (DefaultTableModel) tblSrNo.getModel();
+        int selectedRowIndex = tblSrNo.getSelectedRow();
+        int selectedColumnIndex = tblSrNo.getSelectedColumn();
+        
+        int srNo = Integer.parseInt(model.getValueAt(selectedRowIndex, selectedColumnIndex).toString());
+        
+        System.out.println(srNo);
+        
+        CarProperties carProperties = carPropertyObjects.getCarMap().get(srNo);
+        
+        txtCarName.setText(carProperties.getCarName());
+        
+        if(carProperties.isPassengerCar() == true)
+            rbPasssengerCarYes.setSelected(true);
+        else if(carProperties.isPassengerCar() == false)
+            rbPassengerCarNo.setSelected(true);
+        
+        if(carProperties.isAvailability()== true)
+            rbAvailabilityYes.setSelected(true);
+        else if(carProperties.isAvailability()== false)
+            rbAvailabilityNo.setSelected(true);
+        
+        txtManufacturer.setText(carProperties.getManufacturer());
+        txtYeatOfManufacture.setText(String.valueOf(carProperties.getYearOfManufacture()));
+        txtSeats.setText(String.valueOf(carProperties.getSeats()));
+        txtSerialNumber.setText(String.valueOf(carProperties.getSerialNumber()));
+        txtModelNumber.setText(String.valueOf(carProperties.getModelNumber()));
+        
+    }//GEN-LAST:event_btnShowDetailsActionPerformed
+
+    private void rbMCVNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbMCVNoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rbMCVNoActionPerformed
+
+    private void rbAvailabilityNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbAvailabilityNoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rbAvailabilityNoActionPerformed
+
+    private void rbMCVYesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbMCVYesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rbMCVYesActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
+    private javax.swing.JButton btnShowDetails;
     private javax.swing.JButton btnUploadFIle;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.JComboBox<String> cbCity;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblAvailability;
     private javax.swing.JLabel lblCarName;
     private javax.swing.JLabel lblCity;
@@ -334,8 +482,10 @@ public class CreateCar extends javax.swing.JPanel {
     private javax.swing.JRadioButton rbAvailabilityYes;
     private javax.swing.JRadioButton rbMCVNo;
     private javax.swing.JRadioButton rbMCVYes;
-    private javax.swing.JRadioButton rbPassengerCarNo;
-    private javax.swing.JRadioButton rbPasssengerCarYes;
+    private javax.swing.JCheckBox rbPassengerCarNo;
+    private javax.swing.JCheckBox rbPasssengerCarYes;
+    private javax.swing.JTable tblManufacturer;
+    private javax.swing.JTable tblSrNo;
     private javax.swing.JTextField txtCarName;
     private javax.swing.JTextField txtManufacturer;
     private javax.swing.JTextField txtModelNumber;
