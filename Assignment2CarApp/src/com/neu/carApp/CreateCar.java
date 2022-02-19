@@ -4,12 +4,23 @@
  */
 package com.neu.carApp;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -114,6 +125,7 @@ public class CreateCar extends javax.swing.JPanel {
         txtNoOfCarsAvailable = new javax.swing.JTextField();
         btnAllCars = new javax.swing.JButton();
         btnAvailableCars = new javax.swing.JButton();
+        btnBrowseFile = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(50, 50, 50));
 
@@ -151,9 +163,11 @@ public class CreateCar extends javax.swing.JPanel {
         });
 
         buttonGroup2.add(rbAvailabilityYes);
+        rbAvailabilityYes.setForeground(new java.awt.Color(240, 240, 240));
         rbAvailabilityYes.setText("Yes");
 
         buttonGroup2.add(rbAvailabilityNo);
+        rbAvailabilityNo.setForeground(new java.awt.Color(240, 240, 240));
         rbAvailabilityNo.setText("No");
         rbAvailabilityNo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -175,6 +189,11 @@ public class CreateCar extends javax.swing.JPanel {
         });
 
         btnUploadFIle.setText("Upload FIle");
+        btnUploadFIle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUploadFIleActionPerformed(evt);
+            }
+        });
 
         btnCreate.setText("Create/Update");
         btnCreate.addActionListener(new java.awt.event.ActionListener() {
@@ -203,9 +222,11 @@ public class CreateCar extends javax.swing.JPanel {
         });
 
         buttonGroup1.add(rbPasssengerCarYes);
+        rbPasssengerCarYes.setForeground(new java.awt.Color(240, 240, 240));
         rbPasssengerCarYes.setText("Yes");
 
         buttonGroup1.add(rbPassengerCarNo);
+        rbPassengerCarNo.setForeground(new java.awt.Color(240, 240, 240));
         rbPassengerCarNo.setText("No");
 
         tblManufacturer.setModel(new javax.swing.table.DefaultTableModel(
@@ -349,6 +370,13 @@ public class CreateCar extends javax.swing.JPanel {
             }
         });
 
+        btnBrowseFile.setText("Browse File");
+        btnBrowseFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBrowseFileActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -459,7 +487,10 @@ public class CreateCar extends javax.swing.JPanel {
                             .addComponent(txtMaxSeats)
                             .addComponent(lblMaximumSeats, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
                             .addComponent(txtCitySearch)))
-                    .addComponent(txtSerialNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtSerialNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnBrowseFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(498, 498, 498))
             .addGroup(layout.createSequentialGroup()
                 .addGap(368, 368, 368)
@@ -496,7 +527,8 @@ public class CreateCar extends javax.swing.JPanel {
                             .addComponent(lblYearOfManufacture)
                             .addComponent(txtYeatOfManufacture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblSerialNumber)
-                            .addComponent(txtSerialNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtSerialNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBrowseFile))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1143,10 +1175,200 @@ public class CreateCar extends javax.swing.JPanel {
         }        
     }//GEN-LAST:event_btnAvailableCarsActionPerformed
 
+    private void addCarProperties(String[] properties) {
+        
+        int initialSize, finalSize;       
+        initialSize = carPropertyObjects.getCarMap().size();         
+        
+        CarProperties carProperties = new CarProperties();
+        
+        carProperties.setCarName(properties[0]);
+        carProperties.setManufacturer(properties[1]);
+        carProperties.setModelNumber(Integer.parseInt(properties[2]));
+        carProperties.setSeats(Integer.parseInt(properties[3]));
+        carProperties.setYearOfManufacture(Integer.parseInt(properties[4]));
+        carProperties.setCity(properties[5]);
+        
+        if(properties[6].equalsIgnoreCase("true"))
+            carProperties.setAvailability(true);
+        else
+            carProperties.setAvailability(false);
+        
+        carProperties.setSerialNumber(Integer.parseInt(properties[7]));
+        
+        if(properties[8].equalsIgnoreCase("true"))
+            carProperties.setPassengerCar(true);
+        else
+            carProperties.setPassengerCar(false); 
+        
+        HashMap<Integer, CarProperties> tempMap = new HashMap<Integer, CarProperties>();
+        tempMap = carPropertyObjects.getCarMap();
+        tempMap.put(carProperties.getSerialNumber(), carProperties);
+        carPropertyObjects.setCarMap(tempMap);
+        
+               HashMap<String, HashSet<Integer>> tempManufacturerSrNoMap = new HashMap<String, HashSet<Integer>>();
+        HashSet<Integer> tempHashSet = new HashSet<Integer>();
+        
+        tempManufacturerSrNoMap = carPropertyObjects.getManufacturerSrNoMap();
+        tempHashSet = tempManufacturerSrNoMap.get(carProperties.getManufacturer());
+        
+        if(tempHashSet != null) {
+            tempHashSet.add(carProperties.getSerialNumber());
+        }
+        else {
+            tempHashSet = new HashSet<Integer>();
+            tempHashSet.add(carProperties.getSerialNumber());
+        }
+        
+        tempManufacturerSrNoMap.put(carProperties.getManufacturer(), tempHashSet);
+        carPropertyObjects.setManufacturerSrNoMap(tempManufacturerSrNoMap);
+        
+        finalSize = carPropertyObjects.getCarMap().size();
+        
+        if(initialSize != finalSize) {
+            srNoList.add(carProperties.getSerialNumber());
+            JOptionPane.showMessageDialog(this, "Record Created");
+            
+            if(carProperties.isAvailability()) {
+                availableCars.add(carProperties.getSerialNumber());
+            }
+        }
+        else {
+            srNoList.remove(new Integer(carProperties.getSerialNumber()));
+            srNoList.add(carProperties.getSerialNumber());
+            
+            if(2021-carProperties.getYearOfManufacture() < 10) {
+                expMntnCertCarList.remove(carProperties.getSerialNumber());
+            }
+            
+            availableCars.remove(new Integer(carProperties.getSerialNumber()));
+                        
+            
+            if(carProperties.isAvailability()) {
+                availableCars.add(carProperties.getSerialNumber());
+            }
+                    
+            JOptionPane.showMessageDialog(this, "Record Updated");
+        }
+        
+        txtNoOfCarsAvailable.setText(String.valueOf(availableCars.size()));
+        
+        System.out.println(carProperties.getYearOfManufacture()-2021);
+        if(2021-carProperties.getYearOfManufacture() > 10) {
+            expMntnCertCarList.add(carProperties.getSerialNumber());
+        }
+        
+        manufacturerList.add(carProperties.getManufacturer());
+        
+        SimpleDateFormat date = new SimpleDateFormat("yyyy.MM.dd.HH:mm:ss");
+        String timeStamp = date.format(new Date());
+        txtPnTmstmp.setText(timeStamp);
+        
+        DefaultTableModel model1= (DefaultTableModel) tblSrNo.getModel();
+        model1.setRowCount(0);
+        for(Integer srNo : srNoList){
+            Object[] row = new Object[1];
+            row[0]=srNo;
+            model1.addRow(row);
+        }
+        
+        DefaultTableModel expModel1= (DefaultTableModel) tblExpMntnCertCars.getModel();
+        expModel1.setRowCount(0);
+        
+        Iterator<Integer> ii = expMntnCertCarList.iterator();
+        
+        while(ii.hasNext()) {
+            Object[] row = new Object[1];
+            row[0]=ii.next();
+            expModel1.addRow(row);
+        }       
+        
+        DefaultTableModel manufacturerModel= (DefaultTableModel) tblManufacturer.getModel();
+        manufacturerModel.setRowCount(0);
+        
+        Iterator<String> i = manufacturerList.iterator();
+        
+        while(i.hasNext()) {
+            Object[] row = new Object[1];
+            row[0]=i.next();
+            manufacturerModel.addRow(row);
+        }
+        
+//        carPropertyObjects.getCarMap().put(carProperties.getSerialNumber(), carProperties);
+        
+    }
+    
+    private void btnUploadFIleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadFIleActionPerformed
+       
+        try {
+            // TODO add your handling code here:
+            System.out.println(carProperties.getConfigFilePath());
+            Scanner sc = new Scanner(new File(carProperties.getConfigFilePath()));
+            
+            while(sc.hasNextLine()) {
+                String line = sc.nextLine();
+                System.out.println(line);
+                String[] properties = line.split(",");
+                addCarProperties(properties);
+                System.out.println("Successful");
+            }
+        } 
+        catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "Error reading the file");
+            return;
+        }
+         
+            
+//        try (BufferedReader br = Files.newBufferedReader(Paths.get(carProperties.getConfigFilePath()), StandardCharsets.US_ASCII)) {
+//                
+//                String line  = br.readLine();
+//                
+//                while(line != null) {
+//                    String[] properties = line.split("//");
+//                    
+//                    if(properties.length == 9) {
+//                        
+//                        addCarProperties(properties);
+////                        if(fileUploadValue == 1) {
+////                            JOptionPane.showMessageDialog(this, "Error while uploading");
+////                            carPropertyObjects.getCarMap().remove(carProperties.getSerialNumber());
+////                            return;
+////                        }
+//                        
+//                        line = br.readLine();
+//                    }
+//                    else {
+//                        JOptionPane.showMessageDialog(this, "Entries Missing");
+//                    }
+//                }
+//                JOptionPane.showMessageDialog(this, "Uploaded");
+//            }
+//            
+//            catch(Exception e) {
+//                JOptionPane.showMessageDialog(this, "Error during reading the file");
+//            }
+
+        
+    }//GEN-LAST:event_btnUploadFIleActionPerformed
+
+    private void btnBrowseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseFileActionPerformed
+        // TODO add your handling code here:
+        
+        JFileChooser file = new JFileChooser();
+        file.setCurrentDirectory(new File(System.getProperty("user.home")));
+        int result = file.showSaveDialog(null);
+        
+        if(result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = file.getSelectedFile();
+            carProperties.setConfigFilePath(selectedFile.getAbsolutePath());   
+        }
+    }//GEN-LAST:event_btnBrowseFileActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAllCars;
     private javax.swing.JButton btnAvailableCars;
+    private javax.swing.JButton btnBrowseFile;
     private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnExpCars;
     private javax.swing.JButton btnManufacturerSearch;
@@ -1200,6 +1422,8 @@ public class CreateCar extends javax.swing.JPanel {
     private javax.swing.JTextField txtYearSearch;
     private javax.swing.JTextField txtYeatOfManufacture;
     // End of variables declaration//GEN-END:variables
+
+
 
 
 }

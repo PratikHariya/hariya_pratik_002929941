@@ -22,7 +22,16 @@ public class CarProperties {
     private int modelNumber;
     private boolean validity;
     private String city;
+    private String configFilePath;
+    
+    public String getConfigFilePath() {
+        return configFilePath;
+    }
 
+    public void setConfigFilePath(String configFilePath) {
+        this.configFilePath = configFilePath;
+    }
+    
     public String getCarName() {
         return carName;
     }
