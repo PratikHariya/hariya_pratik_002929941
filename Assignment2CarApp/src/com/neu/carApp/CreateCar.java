@@ -1036,7 +1036,7 @@ public class CreateCar extends javax.swing.JPanel {
             isNum = txtYearSearch.getText().matches("[0-9]+[\\.]?[0-9]*");
         }
         
-        if(!isNum) {
+        if(isNum) {
             JOptionPane.showMessageDialog(this, "Year of Manufacture should be numeric");
             return;
         }
@@ -1046,7 +1046,7 @@ public class CreateCar extends javax.swing.JPanel {
             isModelNum = txtModelSearch.getText().matches("[0-9]+[\\.]?[0-9]*");
         }
         
-        if(!isModelNum) {
+        if(isModelNum) {
             JOptionPane.showMessageDialog(this, "Model Number should be numeric");
             return;
         }        
@@ -1056,7 +1056,7 @@ public class CreateCar extends javax.swing.JPanel {
             isMinNum = txtMinimumSeats.getText().matches("[0-9]+[\\.]?[0-9]*");
         }
         
-        if(!isMinNum) {
+        if(isMinNum) {
             JOptionPane.showMessageDialog(this, "Minimum Seats should be numeric");
             return;
         }  
@@ -1066,7 +1066,7 @@ public class CreateCar extends javax.swing.JPanel {
             isMaxNum = txtMaxSeats.getText().matches("[0-9]+[\\.]?[0-9]*");
         }
         
-        if(!isMinNum) {
+        if(isMinNum) {
             JOptionPane.showMessageDialog(this, "Maximum Seats should be numeric");
             return;
         }        
@@ -1316,6 +1316,10 @@ public class CreateCar extends javax.swing.JPanel {
         catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(this, "Error reading the file");
             return;
+        }
+        catch(Exception e) {
+            JOptionPane.showMessageDialog(this, "Error reading the file");
+            return;            
         }
          
             
