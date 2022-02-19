@@ -6,7 +6,9 @@ package com.neu.carApp;
 
 /**
  *
- * @author 18573
+ * @author Pratik Hariya
+ * 
+ * This Class is used to store the properties of the car
  */
 public class CarProperties {
     
